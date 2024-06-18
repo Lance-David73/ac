@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lance David</title>
+</head>
+<body>
+    <table style="margin: 2px; padding: 0%; margin-top: 0%;">
+        <tr>
+            <td><p>opp =</p></td>
+            <td><p id="operator_display">Current Balance</p></td>
+        </tr>
+    </table>
+
+    <br><br><br>
+    <div>
+        <h1 id="screen"></h1>
+        <button class="tool" id="num_u" onclick="u()">U</button>
+        <button class="tool" id="num_b" onclick="b()">B</button>    
+        <button class="tool" id="num_c" onclick="c()">C</button>
+        <button class="command" id="back" onclick="back()">←</button> <br>   
+        <button class="number" id="num_1" onclick="one()">1</button>
+        <button class="number" id="num_2" onclick="two()">2</button>
+        <button class="number" id="num_3" onclick="three()">3</button>
+        <button class="command" id="num_+" onclick="add()">+</button> <br>
+        <button class="number" id="num_4" onclick="four()">4</button>
+        <button class="number" id="num_5" onclick="five()">5</button>
+        <button class="number" id="num_6" onclick="six()">6</button> 
+        <button class="command" id="num_-" onclick="minus()">-</button> <br>
+        <button class="number" id="num_7" onclick="seven()">7</button>
+        <button class="number" id="num_8" onclick="eight()">8</button>
+        <button class="number" id="num_9" onclick="nine()">9</button> 
+        <button class="command" id="num_done" onclick="done()">✔</button> <br>
+        <button class="number" id="num_0" onclick="zero()">0</button>
+        <button class="number" id="num_dot" onclick="dot()">.</button> 
+    </div>
+    <div></div>
+    <table>
+        <tr>
+            <td><h4 class="word">Current Balance </h4><hr class="hri"></td>
+            <td><h4 class="amount" id="current_balance">8,540</h4><hr></td>
+        </tr>
+        <tr>                       
+            <td><h4 class="word">Usable</h4><hr class="hri"></td>
+            <td><h4 class="amount" id="usable_balance">6,240</h4><hr></td>
+        </tr>
+        <tr>
+            <td><h4 class="word">Unusable</h4><hr class="hri"></td>
+            <td><h4 class="amount" id="unusable_balance">2,300</h4><hr></td>
+        </tr>
+        <tr>
+            <td><h4 class="word">Borrowed</h4><hr class="hri"></td>
+            <td><h4 class="amount" id="borrowed_balance">0</h4><hr></td>
+        </tr>
+        <tr>
+            <td><h4 class="word">Total</h4><hr class="hri"></td>
+            <td><h4 class="amount" id="total_balance">8,540</h4><hr></td>
+        </tr>                      
+    </table>
+    
+    <script>
+        let current_value = "";
+        const screen = document.getElementById("screen");
+        const operatorDisplay = document.getElementById("operator_display");
+        const currentBalanceElem = document.getElementById("current_balance");
+        const usableBalanceElem = document.getElementById("usable_balance");
+        const unusableBalanceElem = document.getElementById("unusable_balance");
+        const borrowedBalanceElem = document.getElementById("borrowed_balance");
+        const totalBalanceElem = document.getElementById("total_balance");
+
+        function parseAmount(value) {
+            return parseFloat(value.replace(/,/g, ''));
+        }
+
+        function formatAmount(value) {
+            return value.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2});
+        }
+
+        function updateBalances() {
+            const currentBalance = parseAmount(currentBalanceElem.textContent);
+            const usableBalance = parseAmount(usableBalanceElem.textContent);
+            const unusableBalance = parseAmount(unusableBalanceElem.textContent);
+            const totalBalance = parseAmount(totalBalanceElem.textContent);
+            const borrowedBalance = parseAmount(borrowedBalanceElem.textContent);
+            const operator = operatorDisplay.textContent;
+            const amount = parseAmount(current_value);
+
+            if (operator === "Current Balance") {
+                let newUsableBalance = usableBalance + amount;
+                let newTotalBalance = totalBalance + amount;
+                currentBalanceElem.textContent = formatAmount(currentBalance + amount);
+                usableBalanceElem.textContent = formatAmount(newUsableBalance);
+                totalBalanceElem.textContent = formatAmount(newTotalBalance);
+            } else if (operator === "Unusable Money") {
+                let newCurrentBalance = currentBalance + amount;
+                let newTotalBalance = totalBalance + amount;
+                unusableBalanceElem.textContent = formatAmount(unusableBalance + amount);
+                currentBalanceElem.textContent = formatAmount(newCurrentBalance);
+                totalBalanceElem.textContent = formatAmount(newTotalBalance);
+            } else if (operator === "Borrowed Money") {
+                let newCurrentBalance = currentBalance - amount;
+                let newUsableBalance = usableBalance - amount;
+                let newTotalBalance = totalBalance - amount;
+                borrowedBalanceElem.textContent = formatAmount(borrowedBalance + amount);
+                currentBalanceElem.textContent = formatAmount(newCurrentBalance);
+                usableBalanceElem.textContent = formatAmount(newUsableBalance);
+                totalBalanceElem.textContent = formatAmount(newTotalBalance);
+            }
+        }
+
+        function updateScreen() {
+            screen.innerHTML = current_value;
+        }
+
+        function one(){
+            current_value += "1";
+            updateScreen();
+        }
+        function two(){
+            current_value += "2";
+            updateScreen();
+        }
+        function three(){
+            current_value += "3";
+            updateScreen();
+        }
+        function four(){
+            current_value += "4";
+            updateScreen();
+        }
+        function five(){
+            current_value += "5";
+            updateScreen();
+        }
+        function six(){
+            current_value += "6";
+            updateScreen();
+        }
+        function seven(){
+            current_value += "7";
+            updateScreen();
+        }
+        function eight(){
+            current_value += "8";
+            updateScreen();
+        }
+        function nine(){
+            current_value += "9";
+            updateScreen();
+        }
+        function zero(){
+            current_value += "0";
+            updateScreen();
+        }
+        function dot(){
+            if (!current_value.includes(".")) {
+                current_value += ".";
+            }
+            updateScreen();
+        }
+        function c(){
+            current_value = "";
+            operatorDisplay.textContent = "Current Balance";
+            updateScreen();
+        }
+        function add(){
+            if (!current_value.startsWith("+") && !current_value.startsWith("-")) {
+                current_value = "+" + current_value;
+            } else if (current_value.startsWith("-")) {
+                current_value = "+" + current_value.slice(1);
+            }
+            updateScreen();
+        }
+        function minus(){
+            if (!current_value.startsWith("+") && !current_value.startsWith("-")) {
+                current_value = "-" + current_value;
+            } else if (current_value.startsWith("+")) {
+                current_value = "-" + current_value.slice(1);
+            }
+            updateScreen();
+        }
+        function back(){
+            if (current_value.length > 1) {
+                current_value = current_value.slice(0, -1);
+            } else {
+                current_value = "";
+            }
+            updateScreen();
+        }
+        function u() {
+            operatorDisplay.textContent = "Unusable Money";
+        }
+        function b() {
+            operatorDisplay.textContent = "Borrowed Money";
+        }
+        function done() {
+            updateBalances();
+            current_value = "";
+            updateScreen();
+        }
+    </script>
+</body>
+<style>
+    body{
+        background-color: rgb(24, 24, 24);
+        color: rgba(226, 226, 226, 0.651);
+        padding: 0;
+        margin: 0;
+        font-family: Gill Sans, Gill Sans MT, 'Calibri', Trebuchet , sans-serif
+    }
+    p{
+        padding: 0;
+        margin-bottom: 0%;
+        break-after: avoid;
+    }
+    .amount{
+        text-align: right;
+    }
+    h1{
+        text-align: right;
+        padding: 0;
+        margin: 0;
+        padding-right: 2%;
+        padding-bottom: 1%;
+        width: 340px;
+        font-size: 300%;
+        height: 50px;
+    }
+    button{
+        width: 74px;
+        height: 74px;
+        border-radius: 37px;
+        border-style: none;
+        border-color: rgba(255, 255, 255, 0);
+        background-color: rgb(212, 212, 212);
+        font-size: larger;
+        margin: 5px;
+        cursor: pointer;
+    }
+    button:active{
+        width: 74px;
+        height: 74px;
+        border-radius: 37px;
+        border-style: none;
+        border-color: rgba(255, 255, 255, 0);
+        background-color: rgb(159, 159, 159);
+        font-size: larger;
+    }
+    .tool{
+        border-color: rgba(63, 63, 63, 0);
+        background-color: rgb(119, 119, 119);
+    }
+    .tool:active{
+        border-color: rgba(112, 112, 112, 0);
+        background-color: rgb(92, 92, 92);
+    }
+    .command{
+        border-color: rgba(255, 255, 255, 0);
+        background-color: rgb(42, 194, 0);
+    }
+    .command:active{
+        border-color: rgba(255, 255, 255, 0);
+        background-color: rgb(18, 141, 2);
+    }
+    .word{
+        text-align: left;
+        padding-right: 15px;
+    }
+    h4{
+        padding: 0;
+        margin: 0;
+    }
+    hr{
+        padding: 0;
+        margin: 0;
+        margin-bottom: 8px;
+    }
+    .hri{
+        margin-right: -3px;
+    }
+    table{
+        margin: 80px;
+        margin-top: 70px;
+        position: relative;
+        border-collapse: collapse;
+    }
+    div{
+        position: relative;
+        top: 0px;
+        width: 350px;
+        left: 1%;
+        right: 0%;
+    }
+</style>
+</html>
