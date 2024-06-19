@@ -4,65 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lance David</title>
+    <style>
+        body {
+            background-color: rgb(24, 24, 24);
+            color: rgba(226, 226, 226, 0.651);
+            padding: 0;
+            margin: 0;
+            font-family: Gill Sans, Gill Sans MT, 'Calibri', Trebuchet, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .calculator-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            text-align: right;
+            padding: 0;
+            margin: 0;
+            padding-left: 2%;
+            padding-bottom: 1%;
+            font-size: 300%;
+            height: 50px;
+            width: 320px; /* Ensure the screen width matches the button container */
+            background-color: #fff;
+            color: #ffffff;
+            border-radius: 10px;
+        }
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 320px; /* Fixed width for the button container */
+        }
+        button {
+            width: 74px;
+            height: 74px;
+            border-radius: 37px;
+            border-style: none;
+            background-color: rgb(212, 212, 212);
+            font-size: larger;
+            cursor: pointer;
+        }
+        button:active {
+            background-color: rgb(159, 159, 159);
+        }
+        .tool {
+            background-color: rgb(119, 119, 119);
+        }
+        .tool:active {
+            background-color: rgb(92, 92, 92);
+        }
+        .command {
+            background-color: rgb(42, 194, 0);
+        }
+        .command:active {
+            background-color: rgb(18, 141, 2);
+        }
+        .amount {
+            text-align: right;
+        }
+        p {
+            padding: 0;
+            margin-bottom: 0%;
+            break-after: avoid;
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 320px;
+
+        }
+
+        .word {
+            text-align: left;
+            padding-right: 15px;
+        }
+        h4 {
+            padding: 0;
+            margin: 0;
+        }
+        hr {
+            padding: 0;
+            margin: 0;
+            margin-bottom: 8px;
+        }
+        .hri {
+            margin-right: -3px;
+        }
+    </style>
 </head>
 <body>
-    <table style="margin: 2px; padding: 0%; margin-top: 0%;">
-        <tr>
-            <td><p>opp =</p></td>
-            <td><p id="operator_display">Current Balance</p></td>
-        </tr>
-    </table>
+    <div class="calculator-container">
+        <table style="margin: 2px; padding: 0%; margin-top: 0%;">
+            <tr>
+                <td style="text-align: right;"><p>opp =</p></td>
+                <td><p id="operator_display">Current Balance</p></td>
+            </tr>
+        </table>
 
-    <br><br><br>
-    <div>
-        <h1 id="screen"></h1>
-                <button class="tool" id="num_u" onclick="u()">U</button>
-        <button class="tool" id="num_b" onclick="b()">B</button>    
-        <button class="tool" id="num_c" onclick="c()">C</button>
-        <button class="command" id="back" onclick="back()">←</button> 
-        <br>   
-        <button class="number" id="num_1" onclick="one()">1</button>
-        <button class="number" id="num_2" onclick="two()">2</button>
-        <button class="number" id="num_3" onclick="three()">3</button>
-        <button class="command" id="num_+" onclick="add()">+</button> 
-        <br>
-        <button class="number" id="num_4" onclick="four()">4</button>
-        <button class="number" id="num_5" onclick="five()">5</button>
-        <button class="number" id="num_6" onclick="six()">6</button> 
-        <button class="command" id="num_-" onclick="minus()">-</button> 
-        <br>
-        <button class="number" id="num_7" onclick="seven()">7</button>
-        <button class="number" id="num_8" onclick="eight()">8</button>
-        <button class="number" id="num_9" onclick="nine()">9</button> 
-        <button class="command" id="num_done" onclick="done()">✔</button> 
-        <br>
-        <button class="number" id="num_0" onclick="zero()">0</button>
-        <button class="number" id="num_dot" onclick="dot()">.</button>  
+        <h1 id="screen" style="background-color: rgb(24, 24, 24)";></h1>
+
+        <div class="button-container">
+            <button class="tool" id="num_u" onclick="u()">U</button>
+            <button class="tool" id="num_b" onclick="b()">B</button>
+            <button class="tool" id="num_c" onclick="c()">C</button>
+            <button class="command" id="back" onclick="back()">←</button>
+            <button class="number" id="num_1" onclick="one()">1</button>
+            <button class="number" id="num_2" onclick="two()">2</button>
+            <button class="number" id="num_3" onclick="three()">3</button>
+            <button class="command" id="num_+" onclick="add()">+</button>
+            <button class="number" id="num_4" onclick="four()">4</button>
+            <button class="number" id="num_5" onclick="five()">5</button>
+            <button class="number" id="num_6" onclick="six()">6</button>
+            <button class="command" id="num_-" onclick="minus()">-</button>
+            <button class="number" id="num_7" onclick="seven()">7</button>
+            <button class="number" id="num_8" onclick="eight()">8</button>
+            <button class="number" id="num_9" onclick="nine()">9</button>
+            <button class="command" id="num_done" onclick="done()">✔</button>
+            <button class="number" id="num_0" onclick="zero()">0</button>
+            <button class="number" id="num_dot" onclick="dot()">.</button>
+        </div>
+
+        <table>
+            <tr>
+                <td><h4 class="word">Current Balance </h4><hr class="hri"></td>
+                <td><h4 class="amount" id="current_balance">8,540</h4><hr></td>
+            </tr>
+            <tr>
+                <td><h4 class="word">Usable</h4><hr class="hri"></td>
+                <td><h4 class="amount" id="usable_balance">6,240</h4><hr></td>
+            </tr>
+            <tr>
+                <td><h4 class="word">Unusable</h4><hr class="hri"></td>
+                <td><h4 class="amount" id="unusable_balance">2,300</h4><hr></td>
+            </tr>
+            <tr>
+                <td><h4 class="word">Borrowed</h4><hr class="hri"></td>
+                <td><h4 class="amount" id="borrowed_balance">0</h4><hr></td>
+            </tr>
+            <tr>
+                <td><h4 class="word">Total</h4><hr class="hri"></td>
+                <td><h4 class="amount" id="total_balance">8,540</h4><hr></td>
+            </tr>
+        </table>
     </div>
-    <div></div>
-    <table>
-        <tr>
-            <td><h4 class="word">Current Balance </h4><hr class="hri"></td>
-            <td><h4 class="amount" id="current_balance">8,540</h4><hr></td>
-        </tr>
-        <tr>                       
-            <td><h4 class="word">Usable</h4><hr class="hri"></td>
-            <td><h4 class="amount" id="usable_balance">6,240</h4><hr></td>
-        </tr>
-        <tr>
-            <td><h4 class="word">Unusable</h4><hr class="hri"></td>
-            <td><h4 class="amount" id="unusable_balance">2,300</h4><hr></td>
-        </tr>
-        <tr>
-            <td><h4 class="word">Borrowed</h4><hr class="hri"></td>
-            <td><h4 class="amount" id="borrowed_balance">0</h4><hr></td>
-        </tr>
-        <tr>
-            <td><h4 class="word">Total</h4><hr class="hri"></td>
-            <td><h4 class="amount" id="total_balance">8,540</h4><hr></td>
-        </tr>                      
-    </table>
-    
+
     <script>
         let current_value = "";
         const screen = document.getElementById("screen");
@@ -115,21 +206,22 @@
 
         function updateScreen() {
             screen.innerHTML = current_value;
+            screen.style.textAlign = "left"; // Align text to the left
         }
 
-        function one(){
+        function one() {
             current_value += "1";
             updateScreen();
         }
-        function two(){
+        function two() {
             current_value += "2";
             updateScreen();
         }
-        function three(){
+        function three() {
             current_value += "3";
             updateScreen();
         }
-        function four(){
+        function four() {
             current_value += "4";
             updateScreen();
         }
@@ -205,96 +297,4 @@
         }
     </script>
 </body>
-<style>
-    body{
-        background-color: rgb(24, 24, 24);
-        color: rgba(226, 226, 226, 0.651);
-        padding: 0;
-        margin: 0;
-        font-family: Gill Sans, Gill Sans MT, 'Calibri', Trebuchet , sans-serif
-    }
-    p{
-        padding: 0;
-        margin-bottom: 0%;
-        break-after: avoid;
-    }
-    .amount{
-        text-align: right;
-    }
-    h1{
-        text-align: right;
-        padding: 0;
-        margin: 0;
-        padding-right: 2%;
-        padding-bottom: 1%;
-        width: 340px;
-        font-size: 300%;
-        height: 50px;
-    }
-    button{
-        width: 74px;
-        height: 74px;
-        border-radius: 37px;
-        border-style: none;
-        border-color: rgba(255, 255, 255, 0);
-        background-color: rgb(212, 212, 212);
-        font-size: larger;
-        margin: 5px;
-        cursor: pointer;
-    }
-    button:active{
-        width: 74px;
-        height: 74px;
-        border-radius: 37px;
-        border-style: none;
-        border-color: rgba(255, 255, 255, 0);
-        background-color: rgb(159, 159, 159);
-        font-size: larger;
-    }
-    .tool{
-        border-color: rgba(63, 63, 63, 0);
-        background-color: rgb(119, 119, 119);
-    }
-    .tool:active{
-        border-color: rgba(112, 112, 112, 0);
-        background-color: rgb(92, 92, 92);
-    }
-    .command{
-        border-color: rgba(255, 255, 255, 0);
-        background-color: rgb(42, 194, 0);
-    }
-    .command:active{
-        border-color: rgba(255, 255, 255, 0);
-        background-color: rgb(18, 141, 2);
-    }
-    .word{
-        text-align: left;
-        padding-right: 15px;
-    }
-    h4{
-        padding: 0;
-        margin: 0;
-    }
-    hr{
-        padding: 0;
-        margin: 0;
-        margin-bottom: 8px;
-    }
-    .hri{
-        margin-right: -3px;
-    }
-    table{
-        margin: 80px;
-        margin-top: 70px;
-        position: relative;
-        border-collapse: collapse;
-    }
-    div{
-        position: relative;
-        top: 0px;
-        width: 350px;
-        left: 1%;
-        right: 0%;
-    }
-</style>
 </html>
