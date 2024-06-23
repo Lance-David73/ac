@@ -4,34 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lance David</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <style>
         body {
             background-color: rgb(24, 24, 24);
             color: rgba(226, 226, 226, 0.651);
             padding: 0;
             margin: 0;
-            font-family: Gill Sans, Gill Sans MT, 'Calibri', Trebuchet, sans-serif;
+            font-family: Roboto, 'sans-serif';
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            height: 100%;
         }
-        .calculator-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+
         h1 {
             text-align: right;
             padding: 0;
             margin: 0;
             padding-left: 2%;
-            padding-bottom: 1%;
+            padding-bottom: 7%;
             font-size: 300%;
             height: 50px;
             width: 320px; /* Ensure the screen width matches the button container */
-            background-color: #fff;
             color: #ffffff;
             border-radius: 10px;
         }
@@ -77,7 +73,6 @@
             margin-top: 20px;
             border-collapse: collapse;
             width: 320px;
-
         }
 
         .word {
@@ -96,18 +91,51 @@
         .hri {
             margin-right: -3px;
         }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+
+        .reset-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: rgb(255, 59, 48);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .reset-button:active {
+            background-color: rgb(200, 44, 34);
+        }
+
+        .transaction-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: rgb(52, 152, 219);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .transaction-button:active {
+            background-color: rgb(41, 128, 185);
+        }
     </style>
 </head>
 <body>
     <div class="calculator-container">
         <table style="margin: 2px; padding: 0%; margin-top: 0%;">
             <tr>
-                <td style="text-align: right;"><p>opp =</p></td>
+                <td style="text-align: right;"><p>Operator = </p></td>
+                <td><p> </p></td>
                 <td><p id="operator_display">Current Balance</p></td>
             </tr>
         </table>
 
-        <h1 id="screen" style="background-color: rgb(24, 24, 24)";></h1>
+        <h1 id="screen" style="background-color: rgb(24, 24, 24);"></h1>
 
         <div class="button-container">
             <button class="tool" id="num_u" onclick="u()">U</button>
@@ -129,19 +157,20 @@
             <button class="number" id="num_0" onclick="zero()">0</button>
             <button class="number" id="num_dot" onclick="dot()">.</button>
         </div>
+        <div class="error-message" id="error_message"></div>
 
         <table>
             <tr>
                 <td><h4 class="word">Current Balance </h4><hr class="hri"></td>
-                <td><h4 class="amount" id="current_balance">8,540</h4><hr></td>
-            </tr>
+                <td><h4 class="amount" id="current_balance">0</h4><hr></td>
+            </tr>                                             
             <tr>
                 <td><h4 class="word">Usable</h4><hr class="hri"></td>
-                <td><h4 class="amount" id="usable_balance">6,240</h4><hr></td>
+                <td><h4 class="amount" id="usable_balance">0</h4><hr></td>
             </tr>
             <tr>
                 <td><h4 class="word">Unusable</h4><hr class="hri"></td>
-                <td><h4 class="amount" id="unusable_balance">2,300</h4><hr></td>
+                <td><h4 class="amount" id="unusable_balance">0</h4><hr></td>
             </tr>
             <tr>
                 <td><h4 class="word">Borrowed</h4><hr class="hri"></td>
@@ -149,9 +178,11 @@
             </tr>
             <tr>
                 <td><h4 class="word">Total</h4><hr class="hri"></td>
-                <td><h4 class="amount" id="total_balance">8,540</h4><hr></td>
+                <td><h4 class="amount" id="total_balance">0</h4><hr></td>
             </tr>
         </table>
+        <button class="reset-button" onclick="resetBalances()">Reset</button>
+        <button class="transaction-button" onclick="viewTransactions()">View Transactions</button>
     </div>
 
     <script>
@@ -163,6 +194,7 @@
         const unusableBalanceElem = document.getElementById("unusable_balance");
         const borrowedBalanceElem = document.getElementById("borrowed_balance");
         const totalBalanceElem = document.getElementById("total_balance");
+        const errorMessage = document.getElementById("error_message");
 
         function parseAmount(value) {
             return parseFloat(value.replace(/,/g, ''));
@@ -172,12 +204,56 @@
             return value.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 2});
         }
 
+        function saveBalances() {
+            localStorage.setItem("current_balance", currentBalanceElem.textContent);
+            localStorage.setItem("usable_balance", usableBalanceElem.textContent);
+            localStorage.setItem("unusable_balance", unusableBalanceElem.textContent);
+            localStorage.setItem("borrowed_balance", borrowedBalanceElem.textContent);
+            localStorage.setItem("total_balance", totalBalanceElem.textContent);
+        }
+
+        function loadBalances() {
+            if (localStorage.getItem("current_balance")) {
+                currentBalanceElem.textContent = localStorage.getItem("current_balance");
+                usableBalanceElem.textContent = localStorage.getItem("usable_balance");
+                unusableBalanceElem.textContent = localStorage.getItem("unusable_balance");
+                borrowedBalanceElem.textContent = localStorage.getItem("borrowed_balance");
+                totalBalanceElem.textContent = localStorage.getItem("total_balance");
+            }
+        }
+
+        function resetBalances() {
+            localStorage.removeItem("current_balance");
+            localStorage.removeItem("usable_balance");
+            localStorage.removeItem("unusable_balance");
+            localStorage.removeItem("borrowed_balance");
+            localStorage.removeItem("total_balance");
+
+            currentBalanceElem.textContent = formatAmount(0);
+            usableBalanceElem.textContent = formatAmount(0);
+            unusableBalanceElem.textContent = formatAmount(0);
+            borrowedBalanceElem.textContent = formatAmount(0);
+            totalBalanceElem.textContent = formatAmount(0);
+
+            current_value = "";
+            screen.textContent = current_value;
+            errorMessage.textContent = "";
+        }
+
+        function recordTransaction(operator, amount) {
+            let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+            const date = new Date().toISOString().slice(0, 10);
+            transactions.push({ date, operator, amount: formatAmount(amount) });
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+        }
+
         function updateBalances() {
             const currentBalance = parseAmount(currentBalanceElem.textContent);
             const usableBalance = parseAmount(usableBalanceElem.textContent);
             const unusableBalance = parseAmount(unusableBalanceElem.textContent);
-            const totalBalance = parseAmount(totalBalanceElem.textContent);
             const borrowedBalance = parseAmount(borrowedBalanceElem.textContent);
+            const totalBalance = parseAmount(totalBalanceElem.textContent);
+
             const operator = operatorDisplay.textContent;
             const amount = parseAmount(current_value);
 
@@ -196,105 +272,131 @@
             } else if (operator === "Borrowed Money") {
                 let newCurrentBalance = currentBalance - amount;
                 let newUsableBalance = usableBalance - amount;
-                let newTotalBalance = totalBalance - amount;
                 borrowedBalanceElem.textContent = formatAmount(borrowedBalance + amount);
                 currentBalanceElem.textContent = formatAmount(newCurrentBalance);
                 usableBalanceElem.textContent = formatAmount(newUsableBalance);
-                totalBalanceElem.textContent = formatAmount(newTotalBalance);
             }
+            recordTransaction(operator, amount);
+            saveBalances();
+            current_value = "";
+            screen.textContent = current_value;
         }
 
-        function updateScreen() {
-            screen.innerHTML = current_value;
-            screen.style.textAlign = "left"; // Align text to the left
+        function validateInput() {
+            if (current_value === "" || current_value === "+" || current_value === "-" || current_value === "." || !/\d/.test(current_value)) {
+                errorMessage.textContent = "Please enter a valid amount.";
+                return false;
+            }
+            return true;
+        }
+
+        function done() {
+            if (!validateInput()) {
+                return;
+            }
+            updateBalances();
+            errorMessage.textContent = "";
+        }
+
+        function u() {
+            operatorDisplay.textContent = "Unusable Money";
+        }
+
+        function b() {
+            operatorDisplay.textContent = "Borrowed Money";
+        }
+
+        function c() {
+            operatorDisplay.textContent = "Current Balance";
+            current_value = "";
+            screen.textContent = current_value;
+        }
+
+        function back() {
+            current_value = current_value.slice(0, -1);
+            screen.textContent = current_value;
         }
 
         function one() {
             current_value += "1";
-            updateScreen();
+            screen.textContent = current_value;
         }
+
         function two() {
             current_value += "2";
-            updateScreen();
+            screen.textContent = current_value;
         }
+
         function three() {
             current_value += "3";
-            updateScreen();
+            screen.textContent = current_value;
         }
+
+        function add() {
+            if (current_value.includes("+") || current_value.includes("-")) {
+                current_value = current_value.replace(/[+-]/, "+");
+            } else {
+                current_value = "+" + current_value;
+            }
+            screen.textContent = current_value;
+        }
+
         function four() {
             current_value += "4";
-            updateScreen();
+            screen.textContent = current_value;
         }
-        function five(){
+
+        function five() {
             current_value += "5";
-            updateScreen();
+            screen.textContent = current_value;
         }
-        function six(){
+
+        function six() {
             current_value += "6";
-            updateScreen();
+            screen.textContent = current_value;
         }
-        function seven(){
-            current_value += "7";
-            updateScreen();
-        }
-        function eight(){
-            current_value += "8";
-            updateScreen();
-        }
-        function nine(){
-            current_value += "9";
-            updateScreen();
-        }
-        function zero(){
-            current_value += "0";
-            updateScreen();
-        }
-        function dot(){
-            if (!current_value.includes(".")) {
-                current_value += ".";
-            }
-            updateScreen();
-        }
-        function c(){
-            current_value = "";
-            operatorDisplay.textContent = "Current Balance";
-            updateScreen();
-        }
-        function add(){
-            if (!current_value.startsWith("+") && !current_value.startsWith("-")) {
-                current_value = "+" + current_value;
-            } else if (current_value.startsWith("-")) {
-                current_value = "+" + current_value.slice(1);
-            }
-            updateScreen();
-        }
-        function minus(){
-            if (!current_value.startsWith("+") && !current_value.startsWith("-")) {
-                current_value = "-" + current_value;
-            } else if (current_value.startsWith("+")) {
-                current_value = "-" + current_value.slice(1);
-            }
-            updateScreen();
-        }
-        function back(){
-            if (current_value.length > 1) {
-                current_value = current_value.slice(0, -1);
+
+        function minus() {
+            if (current_value.includes("+") || current_value.includes("-")) {
+                current_value = current_value.replace(/[+-]/, "-");
             } else {
-                current_value = "";
+                current_value = "-" + current_value;
             }
-            updateScreen();
+            screen.textContent = current_value;
         }
-        function u() {
-            operatorDisplay.textContent = "Unusable Money";
+
+        function seven() {
+            current_value += "7";
+            screen.textContent = current_value;
         }
-        function b() {
-            operatorDisplay.textContent = "Borrowed Money";
+
+        function eight() {
+            current_value += "8";
+            screen.textContent = current_value;
         }
-        function done() {
-            updateBalances();
-            current_value = "";
-            updateScreen();
+
+        function nine() {
+            current_value += "9";
+            screen.textContent = current_value;
         }
+
+        function dot() {
+            current_value += ".";
+            screen.textContent = current_value;
+        }
+
+        function zero() {
+            current_value += "0";
+            screen.textContent = current_value;
+        }
+
+        function viewTransactions() {
+            window.location.href = 'transactions.html';
+        }
+
+        window.onload = function() {
+            loadBalances();
+        };
     </script>
 </body>
 </html>
